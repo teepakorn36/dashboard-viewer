@@ -52,7 +52,99 @@
       cursor: pointer;
     }
 
-    .button-curve {border-radius: 12px;}
+    .ml-auto,
+    .mx-auto {
+      margin-left: auto !important;
+    }
+
+    .mr-auto,
+    .mx-auto {
+      margin-right: auto !important;
+    }
+
+    .col-md-12 {
+      flex: 0 0 100%;
+      max-width: 22%;
+    }
+
+    @media screen and (min-width:500px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 95%;
+      }
+    }
+
+    @media screen and (min-width:600px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 65%;
+      }
+    }
+
+    @media screen and (min-width:700px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 55%;
+      }
+    }
+
+    @media screen and (min-width:800px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 55%;
+      }
+    }
+
+    @media screen and (min-width:900px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width:45%;
+      }
+    }
+
+
+    @media screen and (min-width:1000px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width:45%;
+      }
+    }
+
+    @media screen and (min-width:1200px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width:35%;
+      }
+    }
+
+    @media screen and (min-width:1400px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width:29%;
+      }
+    }
+
+    @media screen and (min-width:1600px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 25%;
+      }
+    }
+
+    @media screen and (min-width:1900px) {
+      .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 22%;
+      }
+    }
+
+    .text-center {
+      text-align: center !important;
+    }
+
+    .button-curve {
+      border-radius: 12px;
+    }
 
     .header-center {
       text-align: center;
@@ -74,17 +166,20 @@
     <tr>
       <td>
         <h3 class="header-center">Agents</h3>
-        <div id="chart" class="text-center"></div>
+        <div id="chart" class="col-md-12 mr-auto ml-auto"></div>
         <table>
           <tr>
-            <td><button type="button" id="value-free" class="button button-curve col-sm-4 text-center rounded-lg bg-free">0</button></td>
-            <td><button type="button" id="value-busy" class="button button-curve col-sm-4 text-center rounded-lg bg-busy">0</button></td>
-            <td><button type="button" id="value-block" class="button button-curve col-sm-4 text-center rounded-lg bg-block">0</button></td>
+            <td><button type="button" id="value-free"
+                class="button button-curve col-sm-4 text-center rounded-lg bg-free">0</button></td>
+            <td><button type="button" id="value-busy"
+                class="button button-curve col-sm-4 text-center rounded-lg bg-busy">0</button></td>
+            <td><button type="button" id="value-block"
+                class="button button-curve col-sm-4 text-center rounded-lg bg-block">0</button></td>
           </tr>
         </table>
-        
-        
-        
+
+
+
       </td>
       <td>
         <h3>Normal</h3>
@@ -135,6 +230,9 @@
     // test chart donut
     var dataChart = [1, 1, 1]
     var options = {
+      legend: {
+        show: false
+      },
       series: dataChart,
       labels: ['Free', 'Busy', 'Block'],
       chart: {
