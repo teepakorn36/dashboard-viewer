@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  dashboard_viewer:
+    image: dashboard_viewer:lastest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8081:80
+    volumes:
+      - "./site-content:/usr/share/nginx/html"

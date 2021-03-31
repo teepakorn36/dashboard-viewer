@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Wallboard</title>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #DFE2E4;
+    }
+
+    #chart {
+      height: 100pt;
+    }
+
+    .bg-free {
+      display: inline-block;
+      background-color: #57CE69;
+    }
+
+    .bg-busy {
+      display: inline-block;
+      background-color: #FEE66B;
+    }
+
+    .bg-block {
+      display: inline-block;
+      background-color: #F94334;
+    }
+
+    .button {
+      border: none;
+      width: 100%;
+      color: black;
+      padding: 4pt;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16pt;
+      cursor: pointer;
+    }
+
+    .button-curve {border-radius: 12px;}
+
+    .header-center {
+      text-align: center;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <div id="agent-table"></div>
+  </div>
+
+
+  <br>
+
+  <table>
+    <tr>
+      <td>
+        <h3 class="header-center">Agents</h3>
+        <div id="chart" class="text-center"></div>
+        <table>
+          <tr>
+            <td><button type="button" id="value-free" class="button button-curve col-sm-4 text-center rounded-lg bg-free">0</button></td>
+            <td><button type="button" id="value-busy" class="button button-curve col-sm-4 text-center rounded-lg bg-busy">0</button></td>
+            <td><button type="button" id="value-block" class="button button-curve col-sm-4 text-center rounded-lg bg-block">0</button></td>
+          </tr>
+        </table>
+        
+        
+        
+      </td>
+      <td>
+        <h3>Normal</h3>
+        <div class="col-sm-7">Answered</div>
+        <div id="value-answer" class="col-sm-5">-</div>
+        <div class="col-sm-7">Answered (%)</div>
+        <div id="value-answer-percen" class="col-sm-5">-</div>
+        <div class="col-sm-7">SLA (%)</div>
+        <div id="value-sla" class="col-sm-5">-</div>
+        <h3>Emergency</h3>
+        <div class="col-sm-7">Answered</div>
+        <div id="value-emer-answer" class="col-sm-5">-</div>
+        <div class="col-sm-7">Answered (%)</div>
+        <div id="value-emer-answer-percen" class="col-sm-5">-</div>
+        <div class="col-sm-7">SLA (%)</div>
+        <div id="value-emer-sla" class="col-sm-5">-</div>
+      </td>
+    </tr>
+  </table>
+
+  <br>
+
+  <!-- <h2>Queue</h2>
+
+  <table>
+    <tr>
+      <td>Waiting</td>
+      <td id="value-waiting">-</td>
+    </tr>
+    <tr>
+      <td>Longest Waiting</td>
+      <td id="value-longest-waiting">-</td>
+    </tr>
+    <tr>
+      <td>Emer.Waiting</td>
+      <td id="value-emer-waiting">-</td>
+    </tr>
+    <tr>
+      <td>Emer.Longest Waiting</td>
+      <td id="value-emer-longest-waiting">-</td>
+    </tr>
+  </table>
+
+
+  <p id="demo"></p> -->
+
+  <script>
+    // test chart donut
+    var dataChart = [1, 1, 1]
+    var options = {
+      series: dataChart,
+      labels: ['Free', 'Busy', 'Block'],
+      chart: {
+        type: 'donut',
+        width: 300,
+      },
+      colors: ['#57CE69', '#FEE66B', '#F94334'],
+      dataLabels: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          startAngle: 0,
+          endAngle: 360,
+          customScale: 1,
+          donut: {
+            size: '60%',
+            background: 'transparent',
+            labels: {
+              show: true,
+              value: {
+                show: true,
+                showAlways: true,
+                fontSize: '50px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 600,
+                offsetY: 0,
+                formatter: function (val) {
+                  return val
+                }
+              },
+              total: {
+                show: true,
+                showAlways: true,
+                label: '',
+                fontSize: '18px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+                offsetY: 50,
+                formatter: function (w) {
+                  return w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b
+                  }, 0)
+                }
+              }
+            }
+          },
+        }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    function updateChart(free, busy, block) {
+      if (dataChart[0] != free || dataChart[1] != busy || dataChart[2] != block) {
+        dataChart[0] = free
+        dataChart[1] = busy
+        dataChart[2] = block
+        chart.updateSeries([free, busy, block])
+      }
+    }
+
+    function loadDoc() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var obj = JSON.parse(this.responseText)
+          // document.getElementById("demo").innerHTML = this.responseText;
+          initTableAgent(obj['agents'])
+          initTableSummary(obj)
+        }
+        else {
+          // document.getElementById("demo").innerHTML = "FAIL " + this.status;
+        }
+      };
+      xhttp.open("GET", "http://169.254.33.30:3000/wallboard", true);
+      xhttp.send();
+    }
+
+    function initTableAgent(agent) {
+      document.getElementById("agent-table").innerHTML = "";
+      var table = document.createElement('table'), th, tr, td, row, cell;
+
+      // th
+      var ths = ["NAME", "STATUS", "SINCE", "CALLER"];
+      tr = document.createElement('tr');
+      for (cell = 0; cell < 4; cell++) {
+        th = document.createElement('th');
+        tr.appendChild(th);
+        th.innerHTML = ths[cell];
+      }
+
+      table.appendChild(tr);
+      for (row = 0; row < agent.length; row++) {
+        tr = document.createElement('tr');
+
+        // agent
+        agentName = document.createElement('td');
+        tr.appendChild(agentName);
+        agentName.innerHTML = agent[row]['name'];
+
+        // status
+        agentStatus = document.createElement('td');
+        tr.appendChild(agentStatus);
+        agentStatus.innerHTML = agent[row]['status'];
+
+        // since
+        agentSince = document.createElement('td');
+        tr.appendChild(agentSince);
+        // agentSince.innerHTML = String(agent[row]['since']).toHHMMSS();
+        if (agent[row]['new_entry']) {
+          agentSince.innerHTML = "Joined"
+        } else {
+          agentSince.innerHTML = String(agent[row]['since']).toHHMMSS();
+        }
+
+        // caller
+        caller = document.createElement('td');
+        tr.appendChild(caller);
+        caller.innerHTML = agent[row]['caller'];
+
+        table.appendChild(tr);
+      }
+      document.getElementById('agent-table').appendChild(table);
+
+    }
+
+    function initTableSummary(summary) {
+      // agents
+      document.getElementById("value-free").innerHTML = summary['Free'];
+      document.getElementById("value-busy").innerHTML = summary['Busy'];
+      document.getElementById("value-block").innerHTML = summary['Block'];
+
+      updateChart(summary['Free'], summary['Busy'], summary['Block'])
+
+      // // queue
+      // document.getElementById("value-waiting").innerHTML = summary['Waiting Call'];
+      // document.getElementById("value-longest-waiting").innerHTML = String(summary['Longest Waiting Call']).toHHMMSS();
+      // document.getElementById("value-emer-waiting").innerHTML = summary['Emer. Waiting Call'];
+      // document.getElementById("value-emer-longest-waiting").innerHTML = String(summary['Emer. Longest Waiting Call']).toHHMMSS();
+
+      // // today
+      var answerPercen = summary['Answer'] == 0 ? 0 : summary['Answer'] / (summary['Answer'] + summary['Abandon']);
+      var emerAnswerPercen = summary['Emer. Answer'] == 0 ? 0 : summary['Emer. Answer'] / (summary['Emer. Answer'] + summary['Emer. Abandon']);
+
+      document.getElementById("value-answer").innerHTML = summary['Answer'];
+      document.getElementById("value-answer-percen").innerHTML = answerPercen + "%";
+      document.getElementById("value-sla").innerHTML = Math.floor(summary['SLA Percent']) + "%";
+
+      document.getElementById("value-emer-answer").innerHTML = summary['Emer. Answer'];
+      document.getElementById("value-emer-answer-percen").innerHTML = emerAnswerPercen + "%";
+      document.getElementById("value-emer-sla").innerHTML = Math.floor(summary['Emer. SLA Percent']) + "%";
+    }
+
+    String.prototype.toHHMMSS = function () {
+      var sec_num = parseInt(this, 10); // don't forget the second param
+      var hours = Math.floor(sec_num / 3600);
+      var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+      var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+      if (hours < 10) { hours = "0" + hours; }
+      if (minutes < 10) { minutes = "0" + minutes; }
+      if (seconds < 10) { seconds = "0" + seconds; }
+      return hours + ':' + minutes + ':' + seconds;
+    }
+    setInterval(function () {
+      loadDoc();
+    }, 1000);
+  </script>
+</body>
+
+</html>
