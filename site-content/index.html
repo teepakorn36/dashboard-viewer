@@ -17,6 +17,11 @@
       padding: 8px;
     }
 
+    th {
+      color: #FFF;
+      background-color: #88909B;
+    }
+
     tr:nth-child(even) {
       background-color: #DFE2E4;
     }
@@ -50,12 +55,103 @@
       display: inline-block;
       font-size: 16pt;
       cursor: pointer;
+      font-weight: bold;
     }
 
-    .button-curve {border-radius: 12px;}
+    .button-curve {border-radius: 5px;}
 
     .header-center {
       text-align: center;
+    }
+
+    .half-table {
+      width: 50%;
+    }
+
+    .ml-auto,
+    .mx-auto {
+      margin-left: auto !important;
+    }
+
+    .mr-auto,
+    .mx-auto {
+      margin-right: auto !important;
+    }
+
+    .center-object {
+      flex: 0 0 100%;
+      max-width: 22%;
+    }
+
+    @media screen and (min-width:500px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+    }
+
+    @media screen and (min-width:600px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 98%;
+      }
+    }
+
+    @media screen and (min-width:700px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 83%;
+      }
+    }
+
+    @media screen and (min-width:800px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 73%;
+      }
+    }
+
+    @media screen and (min-width:900px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width:63%;
+      }
+    }
+
+
+    @media screen and (min-width:1000px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width:60%;
+      }
+    }
+
+    @media screen and (min-width:1200px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width:45%;
+      }
+    }
+
+    @media screen and (min-width:1400px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width:39%;
+      }
+    }
+
+    @media screen and (min-width:1600px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 34%;
+      }
+    }
+
+    @media screen and (min-width:1900px) {
+      .center-object {
+        flex: 0 0 100%;
+        max-width: 32%;
+      }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -72,74 +168,68 @@
 
   <table>
     <tr>
-      <td>
+      <td class="half-table">
         <h3 class="header-center">Agents</h3>
-        <div id="chart" class="text-center"></div>
+        <div id="chart" class="center-object mr-auto ml-auto"></div>
+        <!-- <div id="chart" class=""></div> -->
         <table>
           <tr>
-            <td><button type="button" id="value-free" class="button button-curve col-sm-4 text-center rounded-lg bg-free">0</button></td>
-            <td><button type="button" id="value-busy" class="button button-curve col-sm-4 text-center rounded-lg bg-busy">0</button></td>
-            <td><button type="button" id="value-block" class="button button-curve col-sm-4 text-center rounded-lg bg-block">0</button></td>
+            <td><button type="button" id="value-free" class="button button-curve bg-free">0</button></td>
+            <td><button type="button" id="value-busy" class="button button-curve bg-busy">0</button></td>
+            <td><button type="button" id="value-block" class="button button-curve bg-block">0</button></td>
           </tr>
         </table>
         
         
         
       </td>
-      <td>
+      <td class="half-table">
+
         <h3>Normal</h3>
-        <div class="col-sm-7">Answered</div>
-        <div id="value-answer" class="col-sm-5">-</div>
-        <div class="col-sm-7">Answered (%)</div>
-        <div id="value-answer-percen" class="col-sm-5">-</div>
-        <div class="col-sm-7">SLA (%)</div>
-        <div id="value-sla" class="col-sm-5">-</div>
+        <table>
+          <tr>
+            <td><div>Answered</div></td><td><div id="value-answer">-</div></td>
+          </tr>
+          <tr style="background-color: #FFF;">
+            <td><div>Answered (%)</div></td><td><div id="value-answer-percen">-</div></td>
+          </tr>
+          <tr>
+            <td><div>SLA (%)</div></td><td><div id="value-sla">-</div></td>
+          </tr>
+        </table>
+
         <h3>Emergency</h3>
-        <div class="col-sm-7">Answered</div>
-        <div id="value-emer-answer" class="col-sm-5">-</div>
-        <div class="col-sm-7">Answered (%)</div>
-        <div id="value-emer-answer-percen" class="col-sm-5">-</div>
-        <div class="col-sm-7">SLA (%)</div>
-        <div id="value-emer-sla" class="col-sm-5">-</div>
+        <table>
+          <tr>
+            <td><div>Answered</div></td><td><div id="value-emer-answer">-</div></td>
+          </tr>
+          <tr style="background-color: #FFF;">
+            <td><div>Answered (%)</div></td><td><div id="value-emer-answer-percen">-</div></td>
+          </tr>
+          <tr>
+            <td><div>SLA (%)</div></td><td><div id="value-emer-sla">-</div></td>
+          </tr>
+        </table>
       </td>
     </tr>
   </table>
 
   <br>
 
-  <!-- <h2>Queue</h2>
-
-  <table>
-    <tr>
-      <td>Waiting</td>
-      <td id="value-waiting">-</td>
-    </tr>
-    <tr>
-      <td>Longest Waiting</td>
-      <td id="value-longest-waiting">-</td>
-    </tr>
-    <tr>
-      <td>Emer.Waiting</td>
-      <td id="value-emer-waiting">-</td>
-    </tr>
-    <tr>
-      <td>Emer.Longest Waiting</td>
-      <td id="value-emer-longest-waiting">-</td>
-    </tr>
-  </table>
-
-
-  <p id="demo"></p> -->
+  <!-- <p id="demo"></p> -->
 
   <script>
     // test chart donut
     var dataChart = [1, 1, 1]
     var options = {
+      legend: {
+        show: false
+      },
       series: dataChart,
       labels: ['Free', 'Busy', 'Block'],
       chart: {
         type: 'donut',
-        width: 300,
+        width: 280,
       },
       colors: ['#57CE69', '#FEE66B', '#F94334'],
       dataLabels: {
@@ -151,7 +241,7 @@
           endAngle: 360,
           customScale: 1,
           donut: {
-            size: '60%',
+            size: '55%',
             background: 'transparent',
             labels: {
               show: true,
@@ -235,7 +325,8 @@
         // agent
         agentName = document.createElement('td');
         tr.appendChild(agentName);
-        agentName.innerHTML = agent[row]['name'];
+        var agentNames = agent[row]['name'].split(" ");
+        agentName.innerHTML = agentNames[0];
 
         // status
         agentStatus = document.createElement('td');
@@ -270,12 +361,6 @@
       document.getElementById("value-block").innerHTML = summary['Block'];
 
       updateChart(summary['Free'], summary['Busy'], summary['Block'])
-
-      // // queue
-      // document.getElementById("value-waiting").innerHTML = summary['Waiting Call'];
-      // document.getElementById("value-longest-waiting").innerHTML = String(summary['Longest Waiting Call']).toHHMMSS();
-      // document.getElementById("value-emer-waiting").innerHTML = summary['Emer. Waiting Call'];
-      // document.getElementById("value-emer-longest-waiting").innerHTML = String(summary['Emer. Longest Waiting Call']).toHHMMSS();
 
       // // today
       var answerPercen = summary['Answer'] == 0 ? 0 : summary['Answer'] / (summary['Answer'] + summary['Abandon']);
